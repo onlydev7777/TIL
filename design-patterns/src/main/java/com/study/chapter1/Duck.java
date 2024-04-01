@@ -1,10 +1,6 @@
 package com.study.chapter1;
 
 public abstract class Duck {
-  public void quack(){
-    System.out.println("Duck.quack");
-  }
-
   public void swim(){
     System.out.println("Duck.swim");
   }
