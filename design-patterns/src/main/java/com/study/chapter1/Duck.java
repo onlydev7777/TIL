@@ -1,12 +1,27 @@
 package com.study.chapter1;
 
+import com.study.chapter1.behavior.FlyBehavior;
+import com.study.chapter1.behavior.QuackBehavior;
+
 public abstract class Duck {
-  public void swim(){
+
+  protected FlyBehavior flyBehavior;
+  protected QuackBehavior quackBehavior;
+
+  public void swim() {
     System.out.println("Duck.swim");
   }
 
-  public void display(){
+  public void display() {
     System.out.println("Duck.display");
+  }
+
+  public void performFly() {
+    flyBehavior.fly();
+  }
+
+  public void performQuack() {
+    quackBehavior.quack();
   }
   //기타 오리 메서드
 }
