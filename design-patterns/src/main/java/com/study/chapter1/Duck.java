@@ -24,4 +24,13 @@ public abstract class Duck {
     quackBehavior.quack();
   }
   //기타 오리 메서드
+
+
+  public void setFlyBehavior(FlyBehavior flyBehavior) {
+    this.flyBehavior = flyBehavior;
+  }
+
+  public void setQuackBehavior(QuackBehavior quackBehavior) {
+    this.quackBehavior = quackBehavior;
+  }
 }
