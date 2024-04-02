@@ -134,3 +134,171 @@ public class DecoyDuck extends Duck {
 > 그렇게 하면 나중에 바뀌지 않는 부분에는 영향을 미치지 않은 채로 그 부분만 고치거나 확장할 수 있다."
 
 - SimUDuck 애플리케이션 v4
+
+```java
+public interface FlyBehavior {
+
+  void fly();
+}
+
+public class FlyNoWay implements FlyBehavior {
+
+  @Override
+  public void fly() {
+    System.out.println("FlyNoWay.fly");
+  }
+}
+
+public class FlyWithWings implements FlyBehavior {
+
+  @Override
+  public void fly() {
+    System.out.println("FlyWithWings.fly");
+  }
+}
+```
+
+```java
+public interface QuackBehavior {
+
+  void quack();
+}
+
+public class Quack implements QuackBehavior {
+
+  @Override
+  public void quack() {
+    System.out.println("Quack.quack");
+  }
+}
+
+public class MuteQuack implements QuackBehavior {
+
+  @Override
+  public void quack() {
+    System.out.println("MuteQuack.quack");
+  }
+}
+
+public class Squeak implements QuackBehavior {
+
+  @Override
+  public void quack() {
+    System.out.println("Squeak.quack");
+  }
+}
+```
+
+```java
+public abstract class Duck {
+
+  protected FlyBehavior flyBehavior;
+  protected QuackBehavior quackBehavior;
+
+  public void swim() {
+    System.out.println("Duck.swim");
+  }
+
+  public void display() {
+    System.out.println("Duck.display");
+  }
+
+  public void performFly() {
+    flyBehavior.fly();
+  }
+
+  public void performQuack() {
+    quackBehavior.quack();
+  }
+  //기타 오리 메서드
+}
+```
+
+```java
+public class MallardDuck extends Duck {
+
+  // 구현클래스 대입
+  public MallardDuck() {
+    this.quackBehavior = new Quack();
+    this.flyBehavior = new FlyWithWings();
+  }
+
+  @Override
+  public void display() {
+    System.out.println("MallardDuck.display");
+  }
+}
+
+```
+
+- 이렇게 하면 Duck은 꽥꽥거리는 행위를 하고자 할 때 참조되는 객체에서 꽥꽥 거리기만 하면 됨
+- 객체의 종류는 신경 쓸 필요가 없음. quack()을 수행할 수 있다는 것이 중요
+
+- SimUDuck 애플리케이션 v5
+    - ModelDuck은 날지 못하는 새끼 오리 였다가 진화해서 로켓으로 날 수 있다는 고객 요청
+
+```java
+public abstract class Duck {
+
+  //...중략
+  //동적으로 행동을 바꾸기 위해 setter 메서드 추가
+  public void setFlyBehavior(FlyBehavior flyBehavior) {
+    this.flyBehavior = flyBehavior;
+  }
+
+  public void setQuackBehavior(QuackBehavior quackBehavior) {
+    this.quackBehavior = quackBehavior;
+  }
+}
+```
+
+```java
+//로켓으로 나는 FlyBehavior 구현체 추가
+public class FlyRocketPowred implements FlyBehavior {
+
+  @Override
+  public void fly() {
+    System.out.println("FlyRocketPowred.fly");
+  }
+}
+```
+
+```java
+public class ModelDuck extends Duck {
+
+  public ModelDuck() {
+    this.flyBehavior = new FlyNoWay();
+    this.quackBehavior = new Quack();
+  }
+
+  @Override
+  public void display() {
+    System.out.println("ModelDuck.display");
+  }
+}
+```
+
+```java
+public class MiniDuckSimulator {
+
+  public static void main(String[] args) {
+    Duck modelDuck = new ModelDuck();
+    modelDuck.performFly();     //FlyNoWay.fly
+    modelDuck.performQuack();   //Quack.quack
+
+    modelDuck.setFlyBehavior(new FlyRocketPowred());
+    modelDuck.performFly();     //FlyRocketPowred.fly
+  }
+}
+```
+
+- 디자인 원칙
+
+> 상속보다는 구성을 활용한다.   
+> => 구성을 이용하면 알고리즘군을 캡슐화 할 수 있도록 만들어주며   
+> 객체에 올바른 행동 인터페이스를 구현하면 실행 시에 행동을 바꿀 수도 있게 해준다.
+
+- 스트래티지 패턴(Strategy Pattern)
+
+> 알고리즘군을 정의하고 각각을 캡슐화하여 교환해서 사용할 수 있도록 만든다.   
+> 스트래티지를 활용하면 알고리즘을 사용하는 클라이언트와는 독립적으로 알고리즘을 변경할 수 있다.
