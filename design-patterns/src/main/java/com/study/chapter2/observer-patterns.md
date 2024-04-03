@@ -92,3 +92,111 @@ public class WeatherData {
 
 > 서로 상호작용을 하는 객체 사이에서는 가능하면 느슨하게 결합하는 디자인을 사용해야 한다.
 
+- 기상 모니터링 애플리케이션 v2
+
+```java
+public interface Subject {
+
+  void registerObserver(Observer o);
+
+  void removeObserver(Observer o);
+
+  void notifyObservers();
+}
+
+public class WeatherData implements Subject {
+
+  private List<Observer> observers = new ArrayList<>();
+  private float temperature;
+  private float humidity;
+  private float pressure;
+
+  @Override
+  public void registerObserver(Observer o) {
+    observers.add(o);
+  }
+
+  @Override
+  public void removeObserver(Observer o) {
+    observers.remove(o);
+  }
+
+  @Override
+  public void notifyObservers() {
+    for (Observer observer : observers) {
+      observer.update(temperature, humidity, pressure);
+    }
+  }
+
+  //기상 관측 값이 갱신 될 때 마다 디스플레이에 알려줘야 하는 메서드
+  public void measurementsChanged() {
+    notifyObservers();
+  }
+
+  public void setMeasurements(float temperature, float humidity, float pressure) {
+    this.temperature = temperature;
+    this.humidity = humidity;
+    this.pressure = pressure;
+    measurementsChanged();
+  }
+}
+```
+
+```java
+public interface Observer {
+
+  void update(float temperature, float humidity, float pressure);
+}
+
+public interface DisplayElement {
+
+  void display();
+}
+
+public class CurrentConditionsDisplay implements Observer, DisplayElement {
+
+  private float temperature;
+  private float humidity;
+  private Subject weatherData;
+
+  public CurrentConditionsDisplay(Subject weatherData) {
+    this.weatherData = weatherData;
+    weatherData.registerObserver(this);
+  }
+
+  @Override
+  public void display() {
+    System.out.println("Current conditions: " + temperature
+        + "F degrees and " + humidity + "% humidity");
+  }
+
+  @Override
+  public void update(float temperature, float humidity, float pressure) {
+    this.temperature = temperature;
+    this.humidity = humidity;
+    display();
+  }
+}
+```
+
+```java
+public class WeatherStation {
+
+  public static void main(String[] args) {
+    WeatherData weatherData = new WeatherData();
+
+    CurrentConditionsDisplay currentConditionsDisplay = new CurrentConditionsDisplay(weatherData);
+    StatisticsDisplay statisticsDisplay = new StatisticsDisplay(weatherData);
+    ForecastDisplay forecastDisplay = new ForecastDisplay(weatherData);
+
+    weatherData.setMeasurements(80, 65, 30.4f);
+    weatherData.setMeasurements(82, 70, 29.2f);
+    weatherData.setMeasurements(78, 90, 29.2f);
+  }
+}
+```
+
+- 체감온도 디스플레이를 추가한다고 하면?
+  HeatIndexDisplay.java 파일을 옵저버 패턴을 적용시켜서 만들면 됨.   
+  => 주제 코드는 수정할 필요가 없음
+
