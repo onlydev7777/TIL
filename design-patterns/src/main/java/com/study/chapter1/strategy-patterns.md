@@ -1,4 +1,4 @@
-### 디자인패턴 소개
+### Strategy-Patterns
 
 - SimUDuck 애플리케이션 v1
 
