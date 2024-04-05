@@ -1,4 +1,4 @@
-package com.study.chapter2.observer;
+package com.study.observer.observer;
 
 public interface Observer {
 

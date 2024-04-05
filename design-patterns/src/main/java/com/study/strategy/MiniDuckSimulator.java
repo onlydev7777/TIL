@@ -1,6 +1,6 @@
-package com.study.chapter1;
+package com.study.strategy;
 
-import com.study.chapter1.behavior.FlyRocketPowred;
+import com.study.strategy.behavior.FlyRocketPowred;
 
 public class MiniDuckSimulator {
 

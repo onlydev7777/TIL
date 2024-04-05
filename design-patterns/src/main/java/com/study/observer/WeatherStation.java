@@ -1,9 +1,9 @@
-package com.study.chapter2;
+package com.study.observer;
 
-import com.study.chapter2.observer.CurrentConditionsDisplay;
-import com.study.chapter2.observer.ForecastDisplay;
-import com.study.chapter2.observer.StatisticsDisplay;
-import com.study.chapter2.subject.WeatherData;
+import com.study.observer.observer.CurrentConditionsDisplay;
+import com.study.observer.observer.ForecastDisplay;
+import com.study.observer.observer.StatisticsDisplay;
+import com.study.observer.subject.WeatherData;
 
 public class WeatherStation {
 
