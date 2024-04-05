@@ -1,4 +1,4 @@
-package com.study.chapter1;
+package com.study.strategy;
 
 public class RedheadDuck extends Duck {
 

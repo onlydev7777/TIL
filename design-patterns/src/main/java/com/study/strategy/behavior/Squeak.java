@@ -1,4 +1,4 @@
-package com.study.chapter1.behavior;
+package com.study.strategy.behavior;
 
 public class Squeak implements QuackBehavior {
 

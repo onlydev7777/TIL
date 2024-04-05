@@ -1,7 +1,7 @@
-package com.study.chapter1;
+package com.study.strategy;
 
-import com.study.chapter1.behavior.FlyNoWay;
-import com.study.chapter1.behavior.Quack;
+import com.study.strategy.behavior.FlyNoWay;
+import com.study.strategy.behavior.Quack;
 
 public class ModelDuck extends Duck {
 

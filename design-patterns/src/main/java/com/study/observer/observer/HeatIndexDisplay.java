@@ -1,6 +1,6 @@
-package com.study.chapter2.observer;
+package com.study.observer.observer;
 
-import com.study.chapter2.subject.Subject;
+import com.study.observer.subject.Subject;
 
 public class HeatIndexDisplay implements Observer, DisplayElement {
 

@@ -1,6 +1,6 @@
-package com.study.chapter2.subject;
+package com.study.observer.subject;
 
-import com.study.chapter2.observer.Observer;
+import com.study.observer.observer.Observer;
 import java.util.ArrayList;
 import java.util.List;
 

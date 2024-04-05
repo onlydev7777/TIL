@@ -1,6 +1,6 @@
-package com.study.chapter2.observer;
+package com.study.observer.observer;
 
-import com.study.chapter2.subject.WeatherData;
+import com.study.observer.subject.WeatherData;
 
 public class StatisticsDisplay implements Observer, DisplayElement {
 
