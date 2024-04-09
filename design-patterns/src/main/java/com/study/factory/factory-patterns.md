@@ -152,11 +152,103 @@ public class PizzaTestDrive {
 > 팩토리 메서드 패턴에서는 객체를 생성하기 위한 인터페이스를 정의하는데, 어떤 클래스의 인스턴스를 만들지는 서브 클래스에서 결정하게 만듭니다.
 > 팩토리 메서드 패턴을 이용하면 클래스의 인스턴스를 만드는 일을 서브클래스에게 맡기는 거죠.
 
+◼ 심하게 의존적인 PizzaStore
+![dependent-pizzastore-UML.png](dependent-pizzastore-UML.png)
 
-◼︎
-◼︎
-◼︎
-◼︎
+```java
+public class DependentPizzaStore {
+
+  public Pizza createPizza(String style, String type) {
+    Pizza pizza = null;
+
+    if ("NY".equals(style)) {
+      if ("cheese".equals(type)) {
+        pizza = new NYStyleCheesePizza();
+      } else if ("pepperoni".equals(type)) {
+        pizza = new NYStylePepperoniPizza();
+      } else if ("clam".equals(type)) {
+        pizza = new NYStyleClamPizza();
+      } else if ("eggie".equals(type)) {
+        pizza = new NYStyleEggiePizza();
+      }
+    } else if ("Chicago".equals(style)) {
+      if ("cheese".equals(type)) {
+        pizza = new ChicagoStyleCheesePizza();
+      } else if ("pepperoni".equals(type)) {
+        pizza = new ChicagoStylePepperoniPizza();
+      } else if ("clam".equals(type)) {
+        pizza = new ChicagoStyleClamPizza();
+      } else if ("eggie".equals(type)) {
+        pizza = new ChicagoStyleEggiePizza();
+      }
+    }
+
+    return pizza;
+  }
+}
+```
+
+객체 인스턴스를 직접 만들면 구상클래스에 의존해야 합니다.
+︎
+◼︎ 의존성 뒤집기 원칙(Dependency Inversion Principle)
+
+- 디자인 원칙
+
+> 추상화된 것에 의존하도록 만들어라.
+> 구상클래스에 의존하지 않도록 만들어야 한다.
+
+PizzaStore와 같은 "고수준 구성요소"가 NYStyleCheesePizza와 같은 "저수준 구성요소"를 의존하지 않고 추상 클래스나 인터페이스를 의존하도록 만들어야 한다.
+이는 "고수준 구성요소"와 "저수준 구성요소" 모두에 적용될 수 있다.
+
+◼ ︎팩토리 메서드 패턴이 적용된 PizzaStore
+고수준 모듈(PizzaStore)와 저수준 모듈(NYStyleCheesePizza)이 추상클래스인 Pizza 만을 의존하고 있음
+
+```java
+public abstract class PizzaStore {
+
+  public Pizza orderPizza(String type) {
+    Pizza pizza = createPizza(type);
+
+    pizza.prepare();
+    pizza.bake();
+    pizza.cut();
+    pizza.box();
+
+    return pizza;
+  }
+
+  protected abstract Pizza createPizza(String type);
+}
+
+public class NYStyleCheesePizza extends Pizza {
+
+  public NYStyleCheesePizza() {
+    this.name = "NY Style Sauce and Cheese Pizza";
+    this.dough = "Thin Crust Dough";
+    this.sauce = "Marinara Sauce";
+
+    this.toppings.add("Grated Reggiano Cheese");
+  }
+
+  @Override
+  public void cut() {
+    System.out.println("NYStyleCheesePizza.cut");
+  }
+}
+```
+
+- 디자인 원칙을 지키는데 도움이 되는 가이드라인
+
+1. 어떤 변수에도 구상 클래스에 대한 레퍼런스를 저장하지 않는다.
+   ₩> 팩토리 메서드를 써서 구상클래스에 대한 레퍼런스 변수를 저장하지 않도록 한다.
+2. 구상클래스 에서 유도된 클래스를 만들지 않는다.
+   ₩> 인터페이스나 추상클래스처럼 추상화된 모델로 부터 클래스를 생성해야 한다.
+3. 베이스 클래스에 이미 구현되어 있던 메서드를 오버라이드 하지 않는다.
+   ₩> 이미 구현되어 있는 메서드를 오버라이드 한다는 것은 베이스 클래스가 제대로 추상화 된 것이 아니라 볼 수 있다.
+   베이스 클래스에서 메서드를 정의할 때 모든 서브클래스에서 공유할 수 있는 것만 정의한다.
+
+**어디까지나 가이드라인 일 뿐 실무에서는 유연하게 적용되어야 한다.**
+
 ◼︎
 ◼︎
 ◼︎ 
