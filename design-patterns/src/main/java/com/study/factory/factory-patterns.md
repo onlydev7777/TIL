@@ -249,6 +249,172 @@ public class NYStyleCheesePizza extends Pizza {
 
 **어디까지나 가이드라인 일 뿐 실무에서는 유연하게 적용되어야 한다.**
 
-◼︎
-◼︎
-◼︎ 
+◼︎ 피자 어플리케이션 v3
+
+- 요건 : 피자 분점 별로 원재료를 관리 할 수 있도록 한다.
+- 추상 팩토리 패턴으로 구현
+- UML
+
+![v3-UML.png](v3-UML.png)
+︎
+
+```java
+/**
+ * PizzaIngredientFactory : 추상 팩터리 인터페이스
+ * - 서브클래스에서 원재료 생성 방식 구현하도록 인터페이스 생성
+ */
+public interface PizzaIngredientFactory {
+
+  Dough createDough();
+
+  Sauce createSauce();
+
+  Cheese createCheese();
+
+  Veggies[] createVeggies();
+
+  Pepperoni createPepperoni();
+
+  Clams createClam();
+}
+
+/**
+ * NYPizzaIngredientFactory : 추상 팩터리 인터페이스 구현체
+ * - 뉴욕 피자 원재료 생성 방식 구현
+ */
+public class NYPizzaIngredientFactory implements PizzaIngredientFactory {
+
+  @Override
+  public Dough createDough() {
+    return new ThickCrustDough();
+  }
+
+  @Override
+  public Sauce createSauce() {
+    return new MarinaraSauce();
+  }
+
+  @Override
+  public Cheese createCheese() {
+    return new ReggianoCheese();
+  }
+
+  @Override
+  public Veggies[] createVeggies() {
+    return new Veggies[]{new Garlic(), new Onion(), new Mushroom(), new RedPepper()};
+  }
+
+  @Override
+  public Pepperoni createPepperoni() {
+    return new SlicedPepperoni();
+  }
+
+  @Override
+  public Clams createClam() {
+    return new FreshClams();
+  }
+}
+
+/**
+ * NYPizzaStore - PizzaStore 구현 클래스
+ * createPizza 메서드에서 뉴욕점 피자 원재료 방식의 factory 구현체 생성
+ * 피자메뉴에 뉴욕 원재료 factory 인터페이스를 파라미터로 넘겨서 각 지점별 뉴욕 원재료 factory를 기준으로 pizza 생성 
+ */
+public class NYPizzaStore extends PizzaStore {
+
+  @Override
+  protected Pizza createPizza(String type) {
+    Pizza pizza = null;
+    PizzaIngredientFactory nyPizzaIngredientFactory = new NYPizzaIngredientFactory();
+    if ("cheese".equals(type)) {
+      pizza = new CheesePizza(nyPizzaIngredientFactory);
+      pizza.setName("NY cheese pizza");
+    } else if ("pepperoni".equals(type)) {
+      pizza = new PepperoniPizza(nyPizzaIngredientFactory);
+      pizza.setName("NY pepperoni pizza");
+    } else if ("clam".equals(type)) {
+      pizza = new CalmPizza(nyPizzaIngredientFactory);
+      pizza.setName("NY clam pizza");
+    } else if ("veggie".equals(type)) {
+      pizza = new VeggiePizza(nyPizzaIngredientFactory);
+      pizza.setName("NY veggie pizza");
+    }
+
+    return pizza;
+  }
+}
+
+/**
+ * Pizza - 추상클래스 선언
+ * 멤버변수들은 서브클래스에서 정의할 수 있도록 함
+ * >> 지점별 원재료 방식이 다르기 때문
+ */
+public abstract class Pizza {
+
+  protected String name;
+  protected Dough dough;
+  protected Sauce sauce;
+  protected Veggies[] veggies;
+  protected Cheese cheese;
+  protected Pepperoni pepperoni;
+  protected Clams clam;
+
+  public abstract void prepare();
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void bake() {
+    System.out.println("Pizza.bake");
+  }
+
+  public void cut() {
+    System.out.println("Pizza.cut");
+  }
+
+  public void box() {
+    System.out.println("Pizza.box");
+  }
+
+  @Override
+  public String toString() {
+    return "Pizza{" +
+        "name='" + name + '\'' +
+        ", dough=" + dough +
+        ", sauce=" + sauce +
+        ", veggies=" + Arrays.toString(veggies) +
+        ", cheese=" + cheese +
+        ", pepperoni=" + pepperoni +
+        ", clam=" + clam +
+        '}';
+  }
+}
+
+/**
+ * CheesePizza - Pizza 구현 클래스
+ * 생성자 파라미터로 원재료 factory를 주입받는다.
+ * prepare 메서드에서 주입 받은 원재료 factory로 해당 피자를 만든다. 
+ * >> 어느 지점의 원재료인지는 모른다 >> 캡슐화가 잘 되어 있다. 
+ */
+public class CheesePizza extends Pizza {
+
+  private PizzaIngredientFactory pizzaIngredientFactory;
+
+  public CheesePizza(PizzaIngredientFactory pizzaIngredientFactory) {
+    this.pizzaIngredientFactory = pizzaIngredientFactory;
+  }
+
+  @Override
+  public void prepare() {
+    System.out.println("CheesePizza.prepare");
+    dough = pizzaIngredientFactory.createDough();
+    sauce = pizzaIngredientFactory.createSauce();
+    cheese = pizzaIngredientFactory.createCheese();
+  }
+}
+```
+
+- 추상 팩토리 패턴
+    - 서로 연관된 또는 의존적인 객체들로 이루어진 "제품군"(원재료)을 생성하기 위한 인터페이스를 제공합니다.
+    - 객체 구성을 활용합니다. 객체 생성이 팩토리 인터페이스에서 선언한 메서드에서 구현됩니다.
