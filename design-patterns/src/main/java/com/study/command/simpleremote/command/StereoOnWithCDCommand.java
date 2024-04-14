@@ -17,4 +17,9 @@ public class StereoOnWithCDCommand implements Command {
     stereo.setCd("bigbang - blue");
     stereo.setVolume(11);
   }
+
+  @Override
+  public void undo() {
+    stereo.off();
+  }
 }

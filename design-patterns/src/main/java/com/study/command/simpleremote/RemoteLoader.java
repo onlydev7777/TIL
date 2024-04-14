@@ -1,5 +1,11 @@
 package com.study.command.simpleremote;
 
+import com.study.command.simpleremote.command.GarageDoorDownCommand;
+import com.study.command.simpleremote.command.GarageDoorUpCommand;
+import com.study.command.simpleremote.command.LightOffCommand;
+import com.study.command.simpleremote.command.LightOnCommand;
+import com.study.command.simpleremote.command.StereoOffCommand;
+import com.study.command.simpleremote.command.StereoOnWithCDCommand;
 import com.study.command.simpleremote.invoker.RemoteControl;
 import com.study.command.simpleremote.receiver.GarageDoor;
 import com.study.command.simpleremote.receiver.Light;
@@ -15,16 +21,29 @@ public class RemoteLoader {
     GarageDoor garageDoor = new GarageDoor("Main house");
     Stereo stereo = new Stereo("Living Room");
 
-    remoteControl.setCommands(0, livingRoomLight::on, livingRoomLight::off);
-    remoteControl.setCommands(1, kitchenLight::on, kitchenLight::off);
+    LightOnCommand livingRoomLightOn =
+        new LightOnCommand(livingRoomLight);
+    LightOffCommand livingRoomLightOff =
+        new LightOffCommand(livingRoomLight);
+    LightOnCommand kitchenLightOn =
+        new LightOnCommand(kitchenLight);
+    LightOffCommand kitchenLightOff =
+        new LightOffCommand(kitchenLight);
 
-    Command stereoOnWithCD = () -> {
-      stereo.on();
-      stereo.setCd("bigbang - blue");
-      stereo.setVolume(11);
-    };
-    remoteControl.setCommands(2, stereoOnWithCD, stereo::off);
-    remoteControl.setCommands(3, garageDoor::up, garageDoor::down);
+    GarageDoorUpCommand garageDoorUp =
+        new GarageDoorUpCommand(garageDoor);
+    GarageDoorDownCommand garageDoorDown =
+        new GarageDoorDownCommand(garageDoor);
+
+    StereoOnWithCDCommand stereoOnWithCD =
+        new StereoOnWithCDCommand(stereo);
+    StereoOffCommand stereoOff =
+        new StereoOffCommand(stereo);
+
+    remoteControl.setCommands(0, livingRoomLightOn, livingRoomLightOff);
+    remoteControl.setCommands(1, kitchenLightOn, kitchenLightOff);
+    remoteControl.setCommands(2, garageDoorUp, garageDoorDown);
+    remoteControl.setCommands(3, stereoOnWithCD, stereoOff);
 
     System.out.println(remoteControl);
 
