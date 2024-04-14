@@ -1,4 +1,7 @@
-package com.study.command;
+package com.study.command.simpleremote.command;
+
+import com.study.command.simpleremote.Command;
+import com.study.command.simpleremote.receiver.Light;
 
 public class LightOnCommand implements Command {
 

@@ -1,4 +1,4 @@
-package com.study.command;
+package com.study.command.simpleremote;
 
 public interface Command {
 

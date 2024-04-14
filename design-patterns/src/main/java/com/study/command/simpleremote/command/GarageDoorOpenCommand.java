@@ -1,4 +1,7 @@
-package com.study.command;
+package com.study.command.simpleremote.command;
+
+import com.study.command.simpleremote.Command;
+import com.study.command.simpleremote.receiver.GarageDoor;
 
 public class GarageDoorOpenCommand implements Command {
 
@@ -10,6 +13,6 @@ public class GarageDoorOpenCommand implements Command {
 
   @Override
   public void execute() {
-    garrageDoor.open();
+    garrageDoor.up();
   }
 }

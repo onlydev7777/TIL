@@ -1,4 +1,6 @@
-package com.study.command;
+package com.study.command.simpleremote.invoker;
+
+import com.study.command.simpleremote.Command;
 
 public class SimpleRemoteControl {
 
