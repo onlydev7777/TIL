@@ -31,7 +31,7 @@
 - 클라이언트로부터 입력된 커맨드에 대한 처리를 담당한다.
 - RemoteControl, RemoteControlWithUndo ...
 
-![img.png](command-UML.png)
+![img.png](img/command-UML.png)
 
 ## Undo 기능 추가
 

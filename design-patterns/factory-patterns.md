@@ -87,7 +87,7 @@ public class PizzaStore {
 
 - UML
 
-![v2-UML.png](v2-UML.png)
+![v2-UML.png](img/factory-v2-UML.png)
 
 ```java
 public abstract class PizzaStore {
@@ -153,7 +153,7 @@ public class PizzaTestDrive {
 > 팩토리 메서드 패턴을 이용하면 클래스의 인스턴스를 만드는 일을 서브클래스에게 맡기는 거죠.
 
 ◼ 심하게 의존적인 PizzaStore
-![dependent-pizzastore-UML.png](dependent-pizzastore-UML.png)
+![dependent-pizzastore-UML.png](img/dependent-pizzastore-UML.png)
 
 ```java
 public class DependentPizzaStore {
@@ -255,7 +255,7 @@ public class NYStyleCheesePizza extends Pizza {
 - 추상 팩토리 패턴으로 구현
 - UML
 
-![v3-UML.png](v3-UML.png)
+![v3-UML.png](img/factory-v3-UML.png)
 ︎
 
 ```java

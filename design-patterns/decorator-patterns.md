@@ -25,7 +25,7 @@
 - 스타버즈 커피 어플리케이션
   음료(에스프레소, 하우스블렌드 등) 하나에 첨가물(휘핑크림, 두유, 모카 등)을 더한 금액이 자동합산 되는 프로그램
 
-![deverage_UML.png](deverage_UML.png)
+![deverage_UML.png](img/deverage_UML.png)
 
 1) Beverage
 
