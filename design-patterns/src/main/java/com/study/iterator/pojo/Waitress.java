@@ -1,30 +1,20 @@
 package com.study.iterator.pojo;
 
 import java.util.Iterator;
+import java.util.List;
 
 public class Waitress {
 
-  Menu pancakeHouseMenu;
-  Menu dinerMenu;
-  Menu cafeMenu;
+  List<Menu> menus;
 
-  public Waitress(Menu pancakeHouseMenu, Menu dinerMenu, Menu cafeMenu) {
-    this.pancakeHouseMenu = pancakeHouseMenu;
-    this.dinerMenu = dinerMenu;
-    this.cafeMenu = cafeMenu;
+  public Waitress(List<Menu> menus) {
+    this.menus = menus;
   }
 
   public void printMenu() {
-    Iterator<MenuItem> pancakeIterator = pancakeHouseMenu.createIterator();
-    Iterator<MenuItem> dinerIterator = dinerMenu.createIterator();
-    Iterator<MenuItem> cafeIterator = cafeMenu.createIterator();
-    
-    System.out.println("MENU\n----\nBREAKFAST");
-    printMenu(pancakeIterator);
-    System.out.println("\nLUNCH");
-    printMenu(dinerIterator);
-    System.out.println("\nDINNER");
-    printMenu(cafeIterator);
+    for (Menu menu : menus) {
+      printMenu(menu.createIterator());
+    }
   }
 
   private void printMenu(Iterator<MenuItem> iterator) {
@@ -38,23 +28,16 @@ public class Waitress {
 
   public void printVegetarianMenu() {
     System.out.println("\nVEGETARIAN MENU\n---------------");
-    printVegetarianMenu(pancakeHouseMenu.createIterator());
-    printVegetarianMenu(dinerMenu.createIterator());
-    printVegetarianMenu(cafeMenu.createIterator());
+    for (Menu menu : menus) {
+      printVegetarianMenu(menu.createIterator());
+    }
   }
 
   public boolean isItemVegetarian(String name) {
-    Iterator<MenuItem> pancakeIterator = pancakeHouseMenu.createIterator();
-    if (isVegetarian(name, pancakeIterator)) {
-      return true;
-    }
-    Iterator<MenuItem> dinerIterator = dinerMenu.createIterator();
-    if (isVegetarian(name, dinerIterator)) {
-      return true;
-    }
-    Iterator<MenuItem> cafeIterator = cafeMenu.createIterator();
-    if (isVegetarian(name, cafeIterator)) {
-      return true;
+    for (Menu menu : menus) {
+      if (isVegetarian(name, menu.createIterator())) {
+        return true;
+      }
     }
     return false;
   }

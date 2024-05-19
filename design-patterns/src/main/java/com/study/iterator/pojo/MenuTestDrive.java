@@ -1,5 +1,7 @@
 package com.study.iterator.pojo;
 
+import java.util.List;
+
 public class MenuTestDrive {
 
   public static void main(String args[]) {
@@ -7,7 +9,7 @@ public class MenuTestDrive {
     DinerMenu dinerMenu = new DinerMenu();
     CafeMenu cafeMenu = new CafeMenu();
 
-    Waitress waitress = new Waitress(pancakeHouseMenu, dinerMenu, cafeMenu);
+    Waitress waitress = new Waitress(List.of(pancakeHouseMenu, dinerMenu, cafeMenu));
 
     waitress.printMenu();
     waitress.printVegetarianMenu();
