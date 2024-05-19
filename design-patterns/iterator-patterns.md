@@ -179,3 +179,89 @@ PancakeHouseMenu 클래스가 PancakeHouseMenuIterator 클래스의 역할 까�
 코드를 변경할 만한 이유가 2가지 이상이 되면 그 만큼 그 클래스에 대한 영향도가 높다는 것을 의미하며 이는 유지보수에 좋지 못하다.
 
 **응집도 가 높은 클래스를 작성해야 한다**
+
+***
+### 객체마을 카페메뉴 추가하기
+
+- HashMap 컬렉션으로 MenuItem 을 관리하는 객체마을 카페를 추가
+
+```java
+public class CafeMenu implements Menu {
+
+  HashMap<String, MenuItem> menuItems = new HashMap<String, MenuItem>();
+
+  public void addItem(String name, String description,
+      boolean vegetarian, double price) {
+    MenuItem menuItem = new MenuItem(name, description, vegetarian, price);
+    menuItems.put(name, menuItem);
+  }
+
+  public Map<String, MenuItem> getItems() {
+    return menuItems;
+  }
+
+  public Iterator<MenuItem> createIterator() {
+    return menuItems.values().iterator();
+  }
+}
+```
+
+```java
+public class Waitress {
+
+  Menu pancakeHouseMenu;
+  Menu dinerMenu;
+  Menu cafeMenu;
+
+  public Waitress(Menu pancakeHouseMenu, Menu dinerMenu, Menu cafeMenu) {
+    this.pancakeHouseMenu = pancakeHouseMenu;
+    this.dinerMenu = dinerMenu;
+    this.cafeMenu = cafeMenu;
+  }
+
+  public void printMenu() {
+    Iterator<MenuItem> pancakeIterator = pancakeHouseMenu.createIterator();
+    Iterator<MenuItem> dinerIterator = dinerMenu.createIterator();
+    Iterator<MenuItem> cafeIterator = cafeMenu.createIterator();
+
+    System.out.println("MENU\n----\nBREAKFAST");
+    printMenu(pancakeIterator);
+    System.out.println("\nLUNCH");
+    printMenu(dinerIterator);
+    System.out.println("\nDINNER");
+    printMenu(cafeIterator);
+  }
+}
+```
+
+***
+### 웨이터리스에서 printMenu 메서드를 중복해서 호출하고 있네요. 고쳐봅시다.
+
+- Menu 를 List로 받아서 pring 처리
+
+```java
+public class Waitress {
+
+  List<Menu> menus;
+
+  public Waitress(List<Menu> menus) {
+    this.menus = menus;
+  }
+
+  public void printMenu() {
+    for (Menu menu : menus) {
+      printMenu(menu.createIterator());
+    }
+  }
+}
+```
+
+***
+### 이번에는 디저트 서브 메뉴를 추가해달라고 하네요.
+
+- 메뉴 안에 메뉴가 들어가는 기능을 요청합니다.
+- 디저트 메뉴를 MenuItem 에 넣을 수 있는 구조가 아닙니다.
+- 새로운 디자인이 필요합니다.
+- 이 문제를 해결하기 위해 컴포지트 패턴을 활용하기로 했습니다.
+
+[composite-patterns.md](composite-patterns.md)
