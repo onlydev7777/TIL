@@ -1,5 +1,8 @@
 package _02_factory_method._01_before;
 
+import _03_abstract_factory._02_after.Anchor;
+import _03_abstract_factory._02_after.Wheel;
+
 public class Ship {
 
   private String name;
@@ -7,6 +10,26 @@ public class Ship {
   private String color;
 
   private String logo;
+
+  private Wheel wheel;
+
+  private Anchor anchor;
+
+  public Wheel getWheel() {
+    return wheel;
+  }
+
+  public void setWheel(Wheel wheel) {
+    this.wheel = wheel;
+  }
+
+  public Anchor getAnchor() {
+    return anchor;
+  }
+
+  public void setAnchor(Anchor anchor) {
+    this.anchor = anchor;
+  }
 
   public String getName() {
     return name;
