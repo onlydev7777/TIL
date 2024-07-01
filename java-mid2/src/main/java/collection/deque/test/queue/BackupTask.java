@@ -1,4 +1,4 @@
-package collection.map.test.queue;
+package collection.deque.test.queue;
 
 public class BackupTask implements Task {
 
