@@ -19,6 +19,7 @@ public class SamsungMemberService extends DefaultMemberService {
     super(repository);
   }
 
+  
   @Override
   public List<Member> findAll() {
     log.info("==== decorator before logic ====");

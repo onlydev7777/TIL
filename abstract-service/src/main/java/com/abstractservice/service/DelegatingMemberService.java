@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Getter
 @RequiredArgsConstructor
 @Service
-public class MemberServiceImpl implements MemberService {
+public class DelegatingMemberService implements MemberService {
 
   private final MemberService memberService;
 

@@ -19,7 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 class DefaultMemberServiceTest extends IntegrationTest {
 
   @Autowired
-  MemberServiceImpl memberService;
+  DelegatingMemberService memberService;
 
   @Autowired
   ApplicationContext applicationContext;
@@ -57,13 +57,15 @@ class DefaultMemberServiceTest extends IntegrationTest {
 
   @Test
   void beanCheck() {
-    MemberServiceImpl memberServiceImpl = applicationContext.getBean("memberServiceImpl", MemberServiceImpl.class);
+    DelegatingMemberService delegatingMemberService = applicationContext.getBean("delegatingMemberService", DelegatingMemberService.class);
     DefaultMemberService defaultMemberService = applicationContext.getBean("defaultMemberService", DefaultMemberService.class);
     String[] memberServiceBeanNames = applicationContext.getBeanNamesForType(MemberService.class);
 
-    assertThat(memberServiceImpl).isNotNull();
+    assertThat(delegatingMemberService).isNotNull();
     assertThat(defaultMemberService).isNotNull();
-    assertThat(memberServiceBeanNames).containsOnly("memberServiceImpl", "defaultMemberService");
+    assertThat(defaultMemberService).isNotInstanceOf(SamsungMemberService.class);
+    assertThat(defaultMemberService).isNotInstanceOf(HyundaiMemberService.class);
+    assertThat(memberServiceBeanNames).containsOnly("delegatingMemberService", "defaultMemberService");
 
     assertThatThrownBy(() -> applicationContext.getBean("hyundaiMemberService", HyundaiMemberService.class))
         .isInstanceOf(NoSuchBeanDefinitionException.class);

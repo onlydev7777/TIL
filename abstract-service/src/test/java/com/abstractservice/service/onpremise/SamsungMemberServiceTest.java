@@ -7,9 +7,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.abstractservice.entity.Member;
 import com.abstractservice.service.DefaultMemberService;
+import com.abstractservice.service.DelegatingMemberService;
 import com.abstractservice.service.IntegrationTest;
 import com.abstractservice.service.MemberService;
-import com.abstractservice.service.MemberServiceImpl;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -21,7 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 class SamsungMemberServiceTest extends IntegrationTest {
 
   @Autowired
-  MemberServiceImpl memberService;
+  DelegatingMemberService memberService;
 
   @Autowired
   ApplicationContext applicationContext;
@@ -59,13 +59,16 @@ class SamsungMemberServiceTest extends IntegrationTest {
 
   @Test
   void beanCheck() {
-    MemberServiceImpl memberServiceImpl = applicationContext.getBean("memberServiceImpl", MemberServiceImpl.class);
+    DelegatingMemberService delegatingMemberService = applicationContext.getBean("delegatingMemberService", DelegatingMemberService.class);
     SamsungMemberService samsungMemberService = applicationContext.getBean("samsungMemberService", SamsungMemberService.class);
+    DefaultMemberService defaultMemberService = applicationContext.getBean(DefaultMemberService.class);
     String[] memberServiceBeanNames = applicationContext.getBeanNamesForType(MemberService.class);
 
-    assertThat(memberServiceImpl).isNotNull();
+    assertThat(delegatingMemberService).isNotNull();
     assertThat(samsungMemberService).isNotNull();
-    assertThat(memberServiceBeanNames).containsOnly("memberServiceImpl", "samsungMemberService");
+    assertThat(defaultMemberService).isInstanceOf(SamsungMemberService.class);
+    assertThat(defaultMemberService).isNotInstanceOf(HyundaiMemberService.class);
+    assertThat(memberServiceBeanNames).containsOnly("delegatingMemberService", "samsungMemberService");
 
     assertThatThrownBy(() -> applicationContext.getBean("defaultMemberService", DefaultMemberService.class))
         .isInstanceOf(NoSuchBeanDefinitionException.class);

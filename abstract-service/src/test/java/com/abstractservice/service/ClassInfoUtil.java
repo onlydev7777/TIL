@@ -29,13 +29,13 @@ public class ClassInfoUtil {
 
   private static void printAllBeanNames(ApplicationContext applicationContext) {
     String[] memberServiceBeanNames = applicationContext.getBeanNamesForType(MemberService.class);
-    String[] memberServiceImplBeanNames = applicationContext.getBeanNamesForType(MemberServiceImpl.class);
+    String[] delegatingMemberService = applicationContext.getBeanNamesForType(DelegatingMemberService.class);
     String[] defaultMemberServiceBeanNames = applicationContext.getBeanNamesForType(DefaultMemberService.class);
     String[] samsungMemberServiceBeanNames = applicationContext.getBeanNamesForType(SamsungMemberService.class);
     String[] hyundaiMemberServiceBeanNames = applicationContext.getBeanNamesForType(HyundaiMemberService.class);
 
     beanNamesPrint(memberServiceBeanNames, "MemberService");
-    beanNamesPrint(memberServiceImplBeanNames, "MemberServiceImpl");
+    beanNamesPrint(delegatingMemberService, "DelegatingMemberService");
     beanNamesPrint(defaultMemberServiceBeanNames, "DefaultMemberService");
     beanNamesPrint(samsungMemberServiceBeanNames, "SamsungMemberService");
     beanNamesPrint(hyundaiMemberServiceBeanNames, "HyundaiMemberService");
