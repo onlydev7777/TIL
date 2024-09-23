@@ -1,4 +1,4 @@
-package com.abstractservice.service;
+package com.abstractservice.service.strategy;
 
 import static com.abstractservice.ClassInfoUtil.checkIfProxy;
 import static com.abstractservice.ClassInfoUtil.printBeanName;
@@ -7,6 +7,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.abstractservice.IntegrationTest;
 import com.abstractservice.entity.Member;
+import com.abstractservice.service.DefaultMemberService;
+import com.abstractservice.service.DelegatingMemberService;
+import com.abstractservice.service.MemberService;
 import com.abstractservice.service.onpremise.HyundaiMemberService;
 import com.abstractservice.service.onpremise.SamsungMemberService;
 import java.util.List;
@@ -16,28 +19,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("default")
-class DefaultMemberServiceTest extends IntegrationTest {
+
+@ActiveProfiles("hyundai")
+class HyundaiMemberServiceWithStrategyTest extends IntegrationTest {
 
   @Autowired
-  DelegatingMemberService memberService;
+  DelegatingMemberService service;
 
   @Autowired
   ApplicationContext applicationContext;
 
   @Test
   void checkClassInfo() {
-    checkIfProxy(memberService.getMemberService());
-    printBeanName(applicationContext, memberService.getMemberService());
+    checkIfProxy(service.getMemberService());
+    printBeanName(applicationContext, service.getMemberService());
   }
 
   @Test
   void findByIdTest() {
     //given
-    Member saved = memberService.save("기본");
+    Member saved = service.save("현대");
 
     //when
-    Member byId = memberService.findById(saved.getId());
+    Member byId = service.findById(saved.getId());
 
     //then
     assertThat(saved.getName()).isEqualTo(byId.getName());
@@ -46,11 +50,11 @@ class DefaultMemberServiceTest extends IntegrationTest {
   @Test
   void findAllTest() {
     //given
-    Member saved = memberService.save("기본");
-    Member saved2 = memberService.save("기본2");
+    Member saved = service.save("현대");
+    Member saved2 = service.save("현대2");
 
     //when
-    List<Member> all = memberService.findAll();
+    List<Member> all = service.findAll();
 
     //then
     assertThat(all).contains(saved, saved2);
@@ -59,16 +63,25 @@ class DefaultMemberServiceTest extends IntegrationTest {
   @Test
   void beanCheck() {
     DelegatingMemberService delegatingMemberService = applicationContext.getBean("delegatingMemberService", DelegatingMemberService.class);
-    DefaultMemberService defaultMemberService = applicationContext.getBean("defaultMemberService", DefaultMemberService.class);
+    DefaultMemberService defaultMemberService = applicationContext.getBean("hyundaiMemberService", HyundaiMemberService.class);
     String[] memberServiceBeanNames = applicationContext.getBeanNamesForType(MemberService.class);
+
+    MemberStrategy memberStrategy = applicationContext.getBean(MemberStrategy.class);
+    HyundaiMemberStrategy hyundaiMemberStrategy = applicationContext.getBean("hyundaiMemberStrategy", HyundaiMemberStrategy.class);
 
     assertThat(delegatingMemberService).isNotNull();
     assertThat(defaultMemberService).isNotNull();
+    assertThat(memberStrategy).isNotNull();
+    assertThat(hyundaiMemberStrategy).isNotNull();
+    assertThat(hyundaiMemberStrategy).isInstanceOf(HyundaiMemberStrategy.class);
+    assertThat(memberStrategy).isInstanceOf(HyundaiMemberStrategy.class);
     assertThat(defaultMemberService).isNotInstanceOf(SamsungMemberService.class);
-    assertThat(defaultMemberService).isNotInstanceOf(HyundaiMemberService.class);
-    assertThat(memberServiceBeanNames).containsOnly("delegatingMemberService", "defaultMemberService");
+    assertThat(defaultMemberService).isNotInstanceOf(DelegatingMemberService.class);
+    assertThat(memberStrategy).isNotInstanceOf(DefaultMemberStrategy.class);
+    assertThat(memberStrategy).isNotInstanceOf(SamsungMemberStrategy.class);
+    assertThat(memberServiceBeanNames).containsOnly("delegatingMemberService", "hyundaiMemberService");
 
-    assertThatThrownBy(() -> applicationContext.getBean("hyundaiMemberService", HyundaiMemberService.class))
+    assertThatThrownBy(() -> applicationContext.getBean("defaultMemberService", DefaultMemberService.class))
         .isInstanceOf(NoSuchBeanDefinitionException.class);
     assertThatThrownBy(() -> applicationContext.getBean("samsungMemberService", SamsungMemberService.class))
         .isInstanceOf(NoSuchBeanDefinitionException.class);

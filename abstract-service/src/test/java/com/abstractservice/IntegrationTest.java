@@ -1,4 +1,4 @@
-package com.abstractservice.service;
+package com.abstractservice;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;

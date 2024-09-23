@@ -1,5 +1,8 @@
-package com.abstractservice.service;
+package com.abstractservice;
 
+import com.abstractservice.service.DefaultMemberService;
+import com.abstractservice.service.DelegatingMemberService;
+import com.abstractservice.service.MemberService;
 import com.abstractservice.service.onpremise.HyundaiMemberService;
 import com.abstractservice.service.onpremise.SamsungMemberService;
 import org.springframework.aop.support.AopUtils;

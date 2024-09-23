@@ -1,14 +1,14 @@
 package com.abstractservice.service.onpremise;
 
-import static com.abstractservice.service.ClassInfoUtil.checkIfProxy;
-import static com.abstractservice.service.ClassInfoUtil.printBeanName;
+import static com.abstractservice.ClassInfoUtil.checkIfProxy;
+import static com.abstractservice.ClassInfoUtil.printBeanName;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.abstractservice.IntegrationTest;
 import com.abstractservice.entity.Member;
 import com.abstractservice.service.DefaultMemberService;
 import com.abstractservice.service.DelegatingMemberService;
-import com.abstractservice.service.IntegrationTest;
 import com.abstractservice.service.MemberService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
