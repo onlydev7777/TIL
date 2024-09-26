@@ -1,4 +1,4 @@
-package tobyspring.tobyhellospring;
+package tobyspring.tobyhellospring.exrate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
@@ -8,7 +8,10 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
+import tobyspring.tobyhellospring.payment.ExRateProvider;
 
+@Component
 public class WebApiExRatePaymentProvider implements ExRateProvider {
 
   @Override
@@ -22,6 +25,8 @@ public class WebApiExRatePaymentProvider implements ExRateProvider {
     ObjectMapper mapper = new ObjectMapper();
     ExRateData data = mapper.readValue(response, ExRateData.class);
     BigDecimal exRate = data.rates().get("KRW");
+
+    System.out.println("WebApiExRatePaymentProvider.getExRate : " + exRate);
     return exRate;
   }
 }
