@@ -1,18 +1,18 @@
 package tobyspring.tobyhellospring;
 
+import java.time.Clock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tobyspring.tobyhellospring.exrate.CachedExRateProvider;
 import tobyspring.tobyhellospring.exrate.WebApiExRatePaymentProvider;
 import tobyspring.tobyhellospring.payment.ExRateProvider;
 import tobyspring.tobyhellospring.payment.PaymentService;
 
 @Configuration
-public class ObjectFactory {
+public class PaymentConfig {
 
   @Bean
   public PaymentService paymentService() {
-    return new PaymentService(cachedExRateProvider());
+    return new PaymentService(exRateProvider(), clock());
   }
 
   @Bean
@@ -21,7 +21,7 @@ public class ObjectFactory {
   }
 
   @Bean
-  public ExRateProvider cachedExRateProvider() {
-    return new CachedExRateProvider(exRateProvider());
+  public Clock clock() {
+    return Clock.systemDefaultZone();
   }
 }
