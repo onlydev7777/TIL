@@ -1,5 +1,6 @@
 package tobyspring.tobyhellospring.payment;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -23,8 +24,9 @@ public class Payment {
     this.validUntil = validUntil;
   }
 
-  public static Payment createPrepared(Long orderId, String currency, BigDecimal foreignCurrencyAmount, BigDecimal exRate,
-      LocalDateTime now) {
+  public static Payment createPrepared(Long orderId, String currency, BigDecimal foreignCurrencyAmount, ExRateProvider exRateProvider,
+      LocalDateTime now) throws IOException {
+    BigDecimal exRate = exRateProvider.getExRate(currency);
     BigDecimal convertedAmount = foreignCurrencyAmount.multiply(exRate);
     LocalDateTime validUntil = now.plusMinutes(30);
 
