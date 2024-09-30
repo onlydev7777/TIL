@@ -1,12 +1,11 @@
 package tobyspring.tobyhellospring.exrate;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import tobyspring.tobyhellospring.payment.ExRateProvider;
 
 public class SimpleExRatePaymentProvider implements ExRateProvider {
 
-  public BigDecimal getExRate(String currency) throws IOException {
+  public BigDecimal getExRate(String currency) {
     if ("USD".equals(currency)) {
       return BigDecimal.valueOf(1000);
     }

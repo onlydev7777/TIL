@@ -2,7 +2,6 @@ package tobyspring.tobyhellospring.payment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Duration;
@@ -25,7 +24,7 @@ class PaymentTest {
   }
 
   @Test
-  void createdPrepared() throws IOException {
+  void createdPrepared() {
     //given
     Payment payment = Payment.createPrepared(1L, "USD", BigDecimal.TEN, this.exRateProviderStub, LocalDateTime.now(this.clock));
 
@@ -35,7 +34,7 @@ class PaymentTest {
   }
 
   @Test
-  void isValid() throws IOException {
+  void isValid() {
     //given
     Payment payment = Payment.createPrepared(1L, "USD", BigDecimal.TEN, this.exRateProviderStub, LocalDateTime.now(this.clock));
 

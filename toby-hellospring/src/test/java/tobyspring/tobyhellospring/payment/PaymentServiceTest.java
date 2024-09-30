@@ -2,7 +2,6 @@ package tobyspring.tobyhellospring.payment;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
@@ -21,7 +20,7 @@ class PaymentServiceTest {
   }
 
   @Test
-  void prepare() throws IOException {
+  void prepare() {
 
     testAmount(BigDecimal.valueOf(500), BigDecimal.valueOf(5000));
     testAmount(BigDecimal.valueOf(100), BigDecimal.valueOf(1000));
@@ -29,14 +28,14 @@ class PaymentServiceTest {
   }
 
   @Test
-  void validUntil() throws IOException {
+  void validUntil() {
     PaymentService paymentService = new PaymentService(new ExRateProviderStub(BigDecimal.valueOf(500)), this.clock);
     Payment payment = paymentService.prepare(1L, "USD", BigDecimal.TEN);
 
     assertThat(payment.getValidUntil()).isEqualTo(LocalDateTime.now(this.clock).plusMinutes(30));
   }
 
-  private void testAmount(BigDecimal exRate, BigDecimal convertedAmount) throws IOException {
+  private void testAmount(BigDecimal exRate, BigDecimal convertedAmount) {
     //given
     PaymentService paymentService = new PaymentService(new ExRateProviderStub(exRate), this.clock);
     //when
