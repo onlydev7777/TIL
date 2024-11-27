@@ -14,3 +14,6 @@ logging:
         orm:
           jdbc:
             bind: trace
+
+bzp:
+  production: hyundai

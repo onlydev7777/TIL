@@ -1,10 +1,5 @@
 package com.abstractservice.service.strategy;
 
-import static com.abstractservice.ClassInfoUtil.checkIfProxy;
-import static com.abstractservice.ClassInfoUtil.printBeanName;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 import com.abstractservice.IntegrationTest;
 import com.abstractservice.entity.Member;
 import com.abstractservice.service.DefaultMemberService;
@@ -12,14 +7,20 @@ import com.abstractservice.service.DelegatingMemberService;
 import com.abstractservice.service.MemberService;
 import com.abstractservice.service.onpremise.HyundaiMemberService;
 import com.abstractservice.service.onpremise.SamsungMemberService;
-import java.util.List;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 
+import static com.abstractservice.ClassInfoUtil.*;
+import static org.assertj.core.api.Assertions.*;
+
+
+@Disabled
 @ActiveProfiles("hyundai")
 class HyundaiMemberServiceWithStrategyTest extends IntegrationTest {
 

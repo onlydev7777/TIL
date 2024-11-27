@@ -1,11 +1,11 @@
 package com.abstractservice.service;
 
 import com.abstractservice.entity.Member;
-import com.abstractservice.service.strategy.MemberStrategy;
-import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class DelegatingMemberService implements MemberService {
 
   private final MemberService memberService;
-  private final MemberStrategy memberStrategy;
+//  private final MemberStrategy memberStrategy;
 
   @Override
   public Member findById(Long id) {
@@ -23,8 +23,8 @@ public class DelegatingMemberService implements MemberService {
 //      return hms.findById_Hyundai(id);
 //    }
 
-//    return memberService.findById(id);
-    return memberStrategy.findById(id);
+    return memberService.findById(id);
+//    return memberStrategy.findById(id);
   }
 
   @Override
