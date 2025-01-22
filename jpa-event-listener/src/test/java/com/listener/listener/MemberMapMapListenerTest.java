@@ -112,6 +112,9 @@ class MemberMapMapListenerTest {
 
         log.info("clone 방식 : {} ms", (end-start));
 
+        //비동기 방식 대기... 테스트 코드 단순화
+        Thread.sleep(1000);
+
         List<MemberHistory> histories = memberHistoryRepository.findAll();
         assertThat(histories).hasSize(MEMBER_CNT*102);
     }

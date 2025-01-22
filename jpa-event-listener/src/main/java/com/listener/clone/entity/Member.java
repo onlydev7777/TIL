@@ -1,7 +1,7 @@
 package com.listener.clone.entity;
 
 import com.listener.annotation.Trackable;
-import com.listener.clone.listener.MemberListener;
+import com.listener.clone.listener.EntityChangeListener;
 import com.listener.constant.EntityType;
 import com.listener.trackable.AbstractTrackable;
 import jakarta.persistence.Column;
@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 //@Configurable
-@EntityListeners(MemberListener.class)
+@EntityListeners(EntityChangeListener.class)
 @Table(name = "members")
 @Entity
 public class Member extends AbstractTrackable<Member> {
@@ -176,5 +176,10 @@ public class Member extends AbstractTrackable<Member> {
     @Override
     public EntityType getEntityType() {
         return EntityType.Member;
+    }
+
+    @Override
+    public void createSnapshot(String changeReason) {
+        super.createSnapshot(changeReason);
     }
 }
