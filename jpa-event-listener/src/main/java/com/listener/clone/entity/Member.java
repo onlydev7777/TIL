@@ -1,8 +1,9 @@
 package com.listener.clone.entity;
 
-import com.listener.BaseEntity;
 import com.listener.annotation.Trackable;
-import com.listener.clone.listener.MemberCloneListener;
+import com.listener.clone.listener.MemberListener;
+import com.listener.constant.EntityType;
+import com.listener.trackable.AbstractTrackable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -10,7 +11,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +22,10 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 //@Configurable
-@EntityListeners(MemberCloneListener.class)
+@EntityListeners(MemberListener.class)
 @Table(name = "members")
 @Entity
-public class Member extends BaseEntity implements Cloneable {
+public class Member extends AbstractTrackable<Member> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -145,15 +145,15 @@ public class Member extends BaseEntity implements Cloneable {
     @Trackable private String field99;
     @Trackable private String field100;
 
-    @Transient
-    private Member snapshot;
+//    @Transient
+//    private Member snapshot;
 
-    @Transient
-    private String changeReason;
+//    @Transient
+//    private String changeReason;
 
-    public void saveSnapshot() {
-        this.snapshot = this.clone();
-    }
+//    public void saveSnapshot() {
+//        this.snapshot = this.clone();
+//    }
 
     @Builder
     public Member(String name, Integer age, String addr, BigDecimal assets) {
@@ -174,11 +174,7 @@ public class Member extends BaseEntity implements Cloneable {
     }
 
     @Override
-    public Member clone() {
-        try {
-            return (Member) super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
+    public EntityType getEntityType() {
+        return EntityType.Member;
     }
 }

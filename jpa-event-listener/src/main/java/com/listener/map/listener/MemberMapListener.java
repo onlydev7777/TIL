@@ -1,19 +1,21 @@
 package com.listener.map.listener;
 
+import com.listener.clone.entity.MemberHistory;
+import com.listener.constant.EntityType;
 import com.listener.map.entity.MemberMap;
-import com.listener.map.entity.MemberMapHistory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PreUpdate;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
 
 
+@Component
 public class MemberMapListener {
     @Lazy
     @Autowired
@@ -21,11 +23,6 @@ public class MemberMapListener {
 
     @PreUpdate
     public void preUpdate(MemberMap memberMap){
-        Long id = memberMap.getId();
-        String name = memberMap.getName();
-        BigDecimal assets = memberMap.getAssets();
-        String addr = memberMap.getAddr();
-
         Map<String, Object> snapshot = memberMap.getSnapshot();
         if(snapshot.isEmpty()){
             return ;
@@ -37,8 +34,9 @@ public class MemberMapListener {
             Object newValue = resolveFieldValue(memberMap, fieldName);
 
             if (newValue != null && !newValue.equals(oldValue)) {
-                MemberMapHistory history = MemberMapHistory.builder()
-                        .memberId(memberMap.getId())
+                MemberHistory history = MemberHistory.builder()
+                        .entityId(memberMap.getId())
+                        .entityType(EntityType.MemberMap)
                         .fieldName(fieldName)
                         .changeReason(memberMap.getChangeReason())
                         .oldValue(String.valueOf(oldValue))
