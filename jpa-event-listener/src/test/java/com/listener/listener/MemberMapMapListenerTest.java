@@ -6,8 +6,6 @@ import com.listener.clone.entity.MemberHistory;
 import com.listener.clone.repository.MemberHistoryRepository;
 import com.listener.clone.repository.MemberRepository;
 import com.listener.map.entity.MemberMap;
-import com.listener.map.entity.MemberMapHistory;
-import com.listener.map.repository.MemberMapHistoryRepository;
 import com.listener.map.repository.MemberMapRepository;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +31,6 @@ class MemberMapMapListenerTest {
     MemberMapRepository memberMapRepository;
 
     @Autowired
-    MemberMapHistoryRepository memberMapHistoryRepository;
-
-    @Autowired
     MemberRepository memberRepository;
 
     @Autowired
@@ -50,6 +45,7 @@ class MemberMapMapListenerTest {
     @DisplayName("[Map방식] 멤버가 변경되면 Listener가 동작한다 : 30027 ms")
     @Test
     void 멤버가_변경되면_Map_Listener가_동작한다() throws Exception {
+        memberHistoryRepository.deleteAll();
         for (int i = 0; i < MEMBER_CNT; i++) {
             MemberMap memberMap = MemberMap.builder()
                     .addr("경기도광명시")
@@ -77,7 +73,7 @@ class MemberMapMapListenerTest {
 
         log.info("map 방식 : {} ms", (end-start));
 
-        List<MemberMapHistory> histories = memberMapHistoryRepository.findAll();
+        List<MemberHistory> histories = memberHistoryRepository.findAll();
         assertThat(histories).hasSize(MEMBER_CNT*102);
     }
 
@@ -85,7 +81,7 @@ class MemberMapMapListenerTest {
     @DisplayName("[clone방식] 멤버가 변경되면 Listener가 동작한다 : 29163 ms")
     @Test
     void 멤버가_변경되면_Clone_Listener가_동작한다() throws Exception {
-
+        memberHistoryRepository.deleteAll();
         for (int i = 0; i < MEMBER_CNT; i++) {
             Member member = Member.builder()
                     .addr("경기도광명시")
@@ -103,11 +99,13 @@ class MemberMapMapListenerTest {
 
         long start = System.currentTimeMillis();
         for (Member findMember : members) {
-            findMember.saveSnapshot();
+            findMember.createSnapshot("이사하면서 자산증가");
             findMember.changeAddress("서울특별시", "주소변경");
             findMember.updateAssets(BigDecimal.valueOf(2000), "자산변경1");
 
             FieldRandomSetter.setRandomValues(findMember);
+//            memberRepository.save(findMember);
+//            memberRepository.saveAndFlush(findMember);
             em.flush();
         }
         long end = System.currentTimeMillis();
