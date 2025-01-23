@@ -14,6 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
@@ -21,18 +25,37 @@ public class AsyncEntityChangeHandler {
    @PersistenceContext
    private EntityManager em;
 
+    private static final Map<Class<?>, List<Field>> TRACKABLE_FIELDS_CACHE = new ConcurrentHashMap<>();
+
+    private List<Field> getTrackableFields(Class<?> clazz) {
+        return TRACKABLE_FIELDS_CACHE.computeIfAbsent(clazz, cls -> {
+            log.info("getTrackableFields >> call >> gogogo!!");
+            List<Field> trackableFields = new ArrayList<>();
+            for (Field field : cls.getDeclaredFields()) {
+                if (field.isAnnotationPresent(Trackable.class)) {
+                    field.setAccessible(true);
+                    trackableFields.add(field);
+                }
+            }
+            return trackableFields;
+        });
+    }
 
    @Async
    @EventListener
    @Transactional(propagation = Propagation.REQUIRES_NEW)
    public void handlePreUpdate(EntityChangeEvent entityChangeEvent) {
-       Object trackableEntity = entityChangeEvent.getTrackableEntity();
 
-       if (trackableEntity instanceof AbstractTrackable trackable) {
+        Object trackableEntity = entityChangeEvent.getTrackableEntity();
+
+        if (trackableEntity instanceof AbstractTrackable trackable) {
             Object snapshot = trackable.getSnapshot();
             LocalDateTime now = LocalDateTime.now();
 
-            for (Field field : snapshot.getClass().getDeclaredFields()) {
+            List<Field> fields = getTrackableFields(snapshot.getClass());
+
+//            for (Field field : snapshot.getClass().getDeclaredFields()) {
+            for (Field field : fields) {
                 if (field.isAnnotationPresent(Trackable.class)) {
                     field.setAccessible(true);
                     Object oldValue = null;

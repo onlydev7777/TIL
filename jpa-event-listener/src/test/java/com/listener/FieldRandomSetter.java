@@ -20,7 +20,7 @@ public class FieldRandomSetter {
         }
     }
 
-    private static String generateRandomString(int length) {
+    public static String generateRandomString(int length) {
         StringBuilder builder = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < length; i++) {
