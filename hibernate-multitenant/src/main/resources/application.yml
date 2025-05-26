@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: hibernate-multitenant
+
+  datasource:
+    url: jdbc:postgresql://localhost:54315/newbplocaldb
+    username: newbp_local
+    password: 1q2w3e4r!
+    #    url: jdbc:postgresql://221.168.39.232:54315/newbpdevdb
+    #    username: newbp_app
+    #    password: newbp_app123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+#    open-in-view: false
+
+#    hibernate:
+#      ddl-auto: update
+
+#    show-sql: true
+
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        default_batch_fetch_size: 50
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    org:
+      hibernate:
+        orm:
+          jdbc:
+            bind: trace
