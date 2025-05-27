@@ -36,6 +36,7 @@ public class HibernateConfig {
         jpaPropertiesMap.put("hibernate.tenant_identifier_resolver", tenantIdentifierResolver);
         jpaPropertiesMap.put("hibernate.multi_tenant_connection_provider", multiTenantConnectionProvider);
         jpaPropertiesMap.put("hibernate.hbm2ddl.auto", "update");
+        jpaPropertiesMap.put("hibernate.current_session_context_class", "thread");  //TODO:: 영향도 파악하기
         jpaPropertiesMap.put("show-sql", true);
 
         em.setJpaPropertyMap(jpaPropertiesMap);

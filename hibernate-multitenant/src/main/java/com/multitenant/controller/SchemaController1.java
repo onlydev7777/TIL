@@ -52,4 +52,10 @@ public class SchemaController1 {
     public String saveMemberWithNative(@PathVariable String teamName, @PathVariable String memberName) {
         return memberService.saveWithNative(teamName, memberName);
     }
+
+    //================================ newbp_local에만 있는 teamSchema 엔터티 데이터 확인 ================================//
+    @GetMapping("/team-schema/{teamName}")
+    public String getTeamSchema(@PathVariable String teamName) {
+        return teamService.findTeamSchemaName(teamName);
+    }
 }
