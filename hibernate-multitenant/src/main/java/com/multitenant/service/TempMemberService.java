@@ -6,12 +6,8 @@ import com.multitenant.entity.TempMember;
 import com.multitenant.repository.MemberRepository;
 import com.multitenant.repository.TeamRepository;
 import com.multitenant.repository.TempMemberRepository;
-import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
-import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,10 +19,6 @@ public class TempMemberService {
     private final TempMemberRepository repository;
     private final MemberRepository memberRepository;
     private final TeamRepository teamRepository;
-    private final PlatformTransactionManager transactionManager;
-    private final MultiTenantConnectionProvider multiTenantConnectionProvider;
-    private final CurrentTenantIdentifierResolver tenantIdentifierResolver;
-    private final EntityManagerFactory entityManagerFactory;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void sync(String teamName) {

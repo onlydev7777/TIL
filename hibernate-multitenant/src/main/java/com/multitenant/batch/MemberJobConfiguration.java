@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -36,14 +37,18 @@ public class MemberJobConfiguration {
         return NoTransactionTaskletStepFactory.build("tempMemberStep", jobRepository, transactionManager,
                 ((contribution, chunkContext) -> {
                     schemaService.findSchemaList().forEach(ts->{
-                        TenantContext.setTenant(ts.getSchemaName());
-                        try {
-                            dynamicSchemaManager.updateSchema();
-                            tempMemberService.sync(ts.getTeamName());
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                        TenantContext.clear();
+                        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+                        transactionTemplate.execute(status -> {
+                            TenantContext.setTenant(ts.getSchemaName());
+                            try {
+                                dynamicSchemaManager.updateSchema();
+                                tempMemberService.sync(ts.getTeamName());
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                            TenantContext.clear();
+                            return null;
+                        });
                     });
                     return RepeatStatus.FINISHED;
                 })
