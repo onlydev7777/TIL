@@ -11,8 +11,6 @@ import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -25,7 +23,7 @@ public class DynamicSchemaManager {
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateSchema() {
         SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
         Session session = sessionFactory.getCurrentSession();

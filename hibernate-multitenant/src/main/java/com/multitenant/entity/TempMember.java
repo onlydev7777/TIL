@@ -1,5 +1,6 @@
 package com.multitenant.entity;
 
+import com.multitenant.resolver.TenantIdentifierResolver;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "temp_members", schema = "newbp_local")
+@Table(name = "temp_members", schema = TenantIdentifierResolver.DEFAULT_SCHEMA)
 @Entity
 public class TempMember {
     @Id
