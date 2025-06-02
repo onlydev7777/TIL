@@ -58,4 +58,15 @@ public class SchemaController1 {
     public String getTeamSchema(@PathVariable String teamName) {
         return teamService.findTeamSchemaName(teamName);
     }
+
+    //================================ 신규 트랜잭션 생성 테스트 ================================//
+    @PostMapping("/admin-member/{teamName}/{memberName}")
+    public String saveAdminMember(@PathVariable String teamName, @PathVariable String memberName) {
+        return memberService.saveWithAdmin(teamName, memberName);
+    }
+
+    @PostMapping("/admin-member-error/{teamName}/{memberName}")
+    public String saveAdminMemberButError(@PathVariable String teamName, @PathVariable String memberName) {
+        return memberService.saveWithAdminButException(teamName, memberName);
+    }
 }

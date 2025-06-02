@@ -35,7 +35,7 @@ public class InitData {
                     teamSchemaRepository.save(new TeamSchema(t.getName(), initTeamSchemaMap.get(t.getName())))
             );
 
-            initTempMemberMap.get(t.getName()).forEach(mName ->
+            initTempMemberMap.getOrDefault(t.getName(), List.of()).forEach(mName ->
                     tempMemberRepository.findByTeamNameAndName(t.getName(), mName).orElseGet(()->
                             tempMemberRepository.save(new TempMember(t.getName(), mName))
                     )

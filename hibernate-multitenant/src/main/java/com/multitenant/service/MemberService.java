@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService {
     private final MemberRepository repository;
     private final TeamRepository teamRepository;
+    private final AdminUserService adminUserService;
 
     @Transactional
     public String save(String teamName, String name) {
@@ -29,6 +30,29 @@ public class MemberService {
                 teamRepository.save(new Team(teamName))
         );
         return repository.save(new Member(team, name)).getName();
+    }
+
+    @Transactional
+    public String saveWithAdmin(String teamName, String name) {
+        Team team = teamRepository.findByName(teamName).orElseGet(() ->
+                teamRepository.save(new Team(teamName))
+        );
+        String result = repository.save(new Member(team, name)).getName();
+
+        adminUserService.save(name, teamName);
+
+        return result;
+    }
+
+    @Transactional
+    public String saveWithAdminButException(String teamName, String name) {
+        Team team = teamRepository.findByName(teamName).orElseGet(() ->
+                teamRepository.save(new Team(teamName))
+        );
+        String result = repository.save(new Member(team, name)).getName();
+
+        adminUserService.save(name, teamName);
+        throw new RuntimeException("런타임 오류!!");
     }
 
     public String findByName(String name) {
