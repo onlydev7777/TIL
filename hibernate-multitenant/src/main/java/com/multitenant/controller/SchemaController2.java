@@ -53,6 +53,16 @@ public class SchemaController2 {
         return memberService.saveWithNative(teamName, memberName);
     }
 
+    //================================ JdbcTemplate ================================//
+    @GetMapping("/jdbc-template/member/{name}")
+    public String nameWithJdbcTemplate(@PathVariable String name) {
+        return memberService.findByNameWithJdbcTemplate(name);
+    }
+    @PostMapping("/jdbc-template/member/{teamName}/{memberName}")
+    public String saveMemberWithJdbcTemplate(@PathVariable String teamName, @PathVariable String memberName) {
+        return memberService.saveWithJdbcTemplate(teamName, memberName);
+    }
+
     //================================ newbp_local에만 있는 teamSchema 엔터티 데이터 확인 ================================//
     @GetMapping("/team-schema/{teamName}")
     public String getTeamSchema(@PathVariable String teamName) {
